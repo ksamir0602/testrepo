@@ -293,29 +293,12 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
             if(filter4 != undefined){
                 var tlArray = filter4.split(',');
                 $.each(tlArray,function(i){
-                    $('.restopics-list > li').each(function(){
-                        var aId = $(this).find('input.mCat').attr('id');
-                        var inputVal = $(this).find('input.mCat').attr('value');
-                        var mTag = inputVal.substring(inputVal.lastIndexOf('/') + 1);
-                        if(tlArray[i].indexOf('sub-') > -1){
-                            var dd = tlArray[i];
-                        }else{
-                            var dd = 'sub-' + tlArray[i];
-                        }                        
-                        if(aId == dd || mTag == tlArray[i]){
-                            $(this).find('input#' + aId).prop('checked', true);
-                            $(this).addClass('active');
-                            $(this).find('.mcat-section').addClass('after');
-                        }
-                    })
-                    $('.restopics-list li ul > li input').each(function(){
+                    $('.FilteByTopicList input[name="filterRadio"]').each(function(){
                         var inputId = $(this).attr('id');
                         var inputVal = $(this).attr('value');
                         var mTag = inputVal.substring(inputVal.lastIndexOf('/') + 1);
                         if(inputId == tlArray[i] || mTag == tlArray[i]){
                             $(this).trigger('click');
-                            hds.resourceLib._addRemoveTLTopics();
-                            $(this).parents('li').parents('li').addClass('active');
                         }
                     });
                 })
@@ -323,30 +306,12 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
             if(filter3 != undefined){
                 var scArray = filter3.split(',');
                 $.each(scArray,function(i){
-                    $('.rescat-list > li').each(function(){
-                        var aId = $(this).find('input.mCat').attr('id');
-                        var inputVal = $(this).find('input.mCat').attr('value');
-                        var mTag = inputVal.substring(inputVal.lastIndexOf('/') + 1);
-                        if(scArray[i].indexOf('sub-') > -1){
-                            var dd = scArray[i];
-                        }else{
-                            var dd = 'sub-' + scArray[i];
-                        }
-                        if(aId == dd || mTag == scArray[i]){
-                            $(this).find('input#' + aId).prop('checked', true);
-                            $(this).addClass('active');
-                            $(this).find('.mcat-section').addClass('after');
-                        }
-                    })
-
-                    $('.rescat-list li ul > li input').each(function(){
+                    $('.FilteByObjectiveList input[name="filterRadio"]').each(function(){
                         var inputId = $(this).attr('id');
                         var inputVal = $(this).attr('value');
                         var mTag = inputVal.substring(inputVal.lastIndexOf('/') + 1);
                         if(inputId == scArray[i] || mTag == scArray[i]){
                             $(this).trigger('click');
-                            hds.resourceLib._addRemoveSubcatTag();
-                            $(this).parents('li').parents('li').addClass('active');
                         }
                     });
                 })               
@@ -833,8 +798,7 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                     $('#resLoading').css({'display':'none'});
                     if($('#filterTag .keyword-filter').html() === "" && $('#searchTag .keyword').html()===''){
                         $('#resLoading').css({'display':'none'});
-                        $('.sortResources').hide();
-                        hds.resourceLib._sortByLabelText();
+                        //hds.resourceLib._sortByLabelText();
                         $('#loadResourceContent').empty(); 
                         $('.res-count').css({'display':'none'}); 
                         $('.category-resources-listing').find('.no-matched-result').remove();
@@ -883,6 +847,7 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                     fStatus = true;
                 }
             }
+            hds.commonFunctions.trimTitle('.resource-tile', '.res-int-title h3', 9);
         },
         _r2019renderPromoHtml: function(po,pstart,pend){
             var ss = po.slice(pstart,pend);	
@@ -1192,7 +1157,7 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
             if($('#searchTag .keyword').html() != '' || $('#filterTag .keyword-filter').html() != ''){
                 pstart = 0, pend = 2, fstart = 0, fend = 3;
                 hds.resourceLib._r2019renderPromoHtml(roPromoData, pstart, pend);
-                hds.resourceLib._r2019renderFeaturedHtml(roFeatured.featured, fstart, fend)
+                hds.resourceLib._r2019renderFeaturedHtml(roFeaturedData, fstart, fend)
             }
             $(paginations).pagination('destroy');
             $('#loadResourceContent').empty();
@@ -1285,9 +1250,9 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
             inputSearchLabel = $('.overlayBox .heading h3').text();
             showSearchResult = $('.resSearchResults').text();
             featuredTxt = $.trim($('.rescat-list > li.hidden:first-child').text());
-            hds.resourceLib._r2019loadResourceObject(roDataSource);
+            
             $(window).bind("load", function() {
-                
+                hds.resourceLib._r2019loadResourceObject(roDataSource);
                 $('body').find('.disable-click').remove();
                 $('.rescat-list > li.hidden:first-child').remove();
                 $('ul#asideLinks-product li:first-child').removeClass('active');
@@ -1360,7 +1325,13 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                         $defaultURL = roDataSource,
                         $keyword = $.trim($("#resSearch").val()),            
                         queryURL = '';
-                        //queryURL = $defaultURL.replace(".html", "." + sortId + ".html");                    
+                        //queryURL = $defaultURL.replace(".html", "." + sortId + ".html");
+                        $('#resLoading').css({'display':'block'});
+                        $('.hv-resource-interaction.rlnew .resource-interaction-list').html('');
+                        pStatus = false;
+                        fStatus = false;
+                        roTemp = [];
+
                         $('.sort-by-list li a').parent().removeClass('selected');                    
                         $(this).parent().addClass('selected');
                         $('.sort-by-button').find('.stitle').html(sortLabel);
@@ -1661,15 +1632,11 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                         pStatus = false;
                         fStatus = false;
                         roTemp = [];                        
-                        $('.sortResources').hide();
                         $('#loadResourceContent').empty();
                         $('.category-resources-listing').find('.no-matched-result').remove();
                         hds.resourceLib._r2019renderResHtml(roData,0,tasset1); 
                         hds.resourceLib._setPagination(roData.resources.length, tasset1);                       
-                    }else{
-                        hds.resourceLib._r2019renderResHtml(roData,0,tasset2);
-                        hds.resourceLib._setPagination(roData.resources.length, tasset2);
-                    }                    
+                    }                   
                 }              
             })
             $(document).on('click', '.closeKeyword', function() {
@@ -1687,7 +1654,10 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                 $('.clearSearchIcon').hide();                    
                 if($('#resSearch').val() == ""){
                     var $checkStatus = hds.resourceLib._returnCheckStatus();
-                    if($checkStatus == 0){                            
+                    if($checkStatus == 0){
+                        pStatus = false;
+                        fStatus = false;
+                        roTemp = [];
                         $('.tagList .sfheight a.clear-results').css({'display':'none'});
                     }
                     hds.resourceLib._r2019loadResourceObject(roDataSource);                    

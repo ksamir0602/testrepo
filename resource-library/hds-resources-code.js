@@ -20,9 +20,10 @@ roFeaturedData = [];
 roPromoData = [];
 pStatus = false;
 fStatus = false;
+sStatus = false;
 tasset1 = 16;
 tasset2 = 19;
-var roDataSource = "/bin/services/resourcelibrarymaster";
+var roDataSource = "/bin/services/resourcelibrarymaster.en_us";
 
 (function(window, document, $, hds) {
     hds.resourceLib = {
@@ -798,7 +799,10 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                     $('#resLoading').css({'display':'none'});
                     if($('#filterTag .keyword-filter').html() === "" && $('#searchTag .keyword').html()===''){
                         $('#resLoading').css({'display':'none'});
-                        //hds.resourceLib._sortByLabelText();
+                        if(sStatus == false){
+                            hds.resourceLib._sortByLabelText();
+                            sStatus = true;
+                        }
                         $('#loadResourceContent').empty(); 
                         $('.res-count').css({'display':'none'}); 
                         $('.category-resources-listing').find('.no-matched-result').remove();
@@ -815,6 +819,16 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                 }
             })
         },
+        _r2019getContentType: function(atags){
+            var tagArray = atags.split(',');
+            var aa = ''; 
+            $.each(tagArray, function(i, val){    
+                if(val.indexOf('content-type') > -1){        
+                    aa = val.substring(val.lastIndexOf('/') + 1).replace('-', ' ').toUpperCase();
+                }
+            })
+            return aa;
+        },
         _r2019renderResHtml: function(jo,start,end){
             $('.resource-interaction-list').html('');
             var ss = jo.resources.slice(start,end);	
@@ -825,7 +839,8 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                 if(val.assetGated == true){
                     lockHTML = '<span class="glyphicon glyphicon-lock" style="background: #fff;top: 1px;"></span>';
                 }
-                $a = $a + '<div class="col-centered col-md-3 resource-tile" data-subfilter="'+ val.assetTags +'"><div class="res-int-item"><a href="'+ val.assetLink +'" target="_blank" class="card-link1 clearfix"><div class="pop"><img src="/content/dam/public/en_us/images/products/data-protection/data-protection-as-service/dpaas-asset-image.jpg" alt="" class="img-responsive"></div><div class="res-int-title"><div class="res-int-cat">'+ val.assetContentType +'</div><h3>'+ val.assetTitle +'</h3></div><div class="animateLink card-click-cta ctbox">'+ lockHTML +'Learn More<span class="glyphicon glyphicon-menu-right animateIcon"></span></div></a></div></div>';
+                var cType = hds.resourceLib._r2019getContentType(val.assetTags);
+                $a = $a + '<div class="col-centered col-md-3 resource-tile" data-subfilter="'+ val.assetTags +'"><div class="res-int-item"><a href="'+ val.assetLink +'" target="_blank" class="card-link1 clearfix"><div class="pop"><img src="/content/dam/public/en_us/images/products/data-protection/data-protection-as-service/dpaas-asset-image.jpg" alt="" class="img-responsive"></div><div class="res-int-title"><div class="res-int-cat">'+ cType +'</div><h3>'+ val.assetTitle +'</h3></div><div class="animateLink card-click-cta ctbox">'+ lockHTML +'Learn More<span class="glyphicon glyphicon-menu-right animateIcon"></span></div></a></div></div>';
             });
             $('.resource-interaction-list').append($a);            
             if(pStatus == false){
@@ -847,13 +862,13 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                     fStatus = true;
                 }
             }
-            hds.commonFunctions.trimTitle('.resource-tile', '.res-int-title h3', 9);
+            hds.commonFunctions.trimTitle('.resource-tile', '.res-int-title h3', 8);
         },
         _r2019renderPromoHtml: function(po,pstart,pend){
             var ss = po.slice(pstart,pend);	
             var $pHtml = [];
             var pBgImg = '/content/dam/public/en_us/images/news-and-insights/resources/promo-default-image.jpg';
-            $.each(ss, function(j, val){
+            $.each(ss, function(j, val){                
                 $pHtml.push('<div class="col-centered col-md-3 resource-tile promo"><div class="res-int-item" style="background-image:url('+ pBgImg +');"><a href="'+ val.pUrl +'" target="_blank" class="card-link1 clearfix"><div class="pop"></div><div class="res-int-title"><h3>'+ val.pTitle +'</h3><p>'+ val.pDesc +'</p></div><div class="btn-square-red learn-more-promo"><div class="animateLink card-click-cta ctbox">'+ val.pCta + '</div></div></a></div></div>');
             });
             $('.resource-interaction-list').append($pHtml);
@@ -866,9 +881,9 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                 if(val.assetGated == true){
                     lockHTML = '<span class="glyphicon glyphicon-lock" style="background: #fff;top: 1px;"></span>';
                 }
-
+                var cType = hds.resourceLib._r2019getContentType(val.assetTags);
                 if($('#filterTag .keyword-filter').html() === "" && $('#searchTag .keyword').html()===''){
-                    $fHtml.push('<div class="col-centered col-md-6 resource-tile featured"  data-subfilter="'+ val.assetTags +'"><div class="res-int-item featured "><a href="'+ val.assetLink +'" target="_blank" class="card-link1 clearfix"><div class="col-md-6 col-no-pad"><div class="pop"><img src="/content/dam/public/en_us/images/products/storage/storage-as-service/staas-featured-asset.jpg" alt="" class="img-responsive"></div></div><div class="col-md-6 col-no-pad"><div class="res-featured">FEATURED</div><div class="res-int-title"><div class="res-int-cat">'+ val.assetContentType +'</div><h3>'+ val.assetTitle +'</h3></div><div class="animateLink card-click-cta ctbox">'+ lockHTML +' Learn More<span class="glyphicon glyphicon-menu-right animateIcon"></span></div></div></a></div></div>');
+                    $fHtml.push('<div class="col-centered col-md-6 resource-tile featured"  data-subfilter="'+ val.assetTags +'"><div class="res-int-item featured "><a href="'+ val.assetLink +'" target="_blank" class="card-link1 clearfix"><div class="col-md-6 col-no-pad"><div class="pop"><img src="/content/dam/public/en_us/images/products/storage/storage-as-service/staas-featured-asset.jpg" alt="" class="img-responsive"></div></div><div class="col-md-6 col-no-pad"><div class="res-featured">FEATURED</div><div class="res-int-title"><div class="res-int-cat">'+ cType +'</div><h3>'+ val.assetTitle +'</h3></div><div class="animateLink card-click-cta ctbox">'+ lockHTML +' Learn More<span class="glyphicon glyphicon-menu-right animateIcon"></span></div></div></a></div></div>');
                 }else{
                     $fHtml.push('<div class="col-centered col-md-3 resource-tile" data-subfilter="'+ val.assetTags +'"><div class="res-int-item"><a href="'+ val.assetLink +'" target="_blank" class="card-link1 clearfix"><div class="pop"><div class="res-featured" style="position:absolute; z-index: 9999;">FEATURED</div><img src="/content/dam/public/en_us/images/products/data-protection/data-protection-as-service/dpaas-asset-image.jpg" alt="" class="img-responsive"></div><div class="res-int-title"><div class="res-int-cat">'+ val.assetContentType +'</div><h3>'+ val.assetTitle +'</h3></div><div class="animateLink card-click-cta ctbox">'+ lockHTML +'Learn More<span class="glyphicon glyphicon-menu-right animateIcon"></span></div></a></div></div>');
                 }
@@ -932,6 +947,20 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                     }
                 });
             }           
+        },
+        _r2019checkSelectedFilter: function(){
+            var af = [];
+            $('#filterTag .keyword-filter .filterKeyword').each(function(){
+                af.push($(this).data('match'));
+            })
+            $('input[name="filterRadio"]').prop('checked', false);
+            $.grep(af, function(m1,mval){
+                $('input[name="filterRadio"]').each(function(){
+                    if($(this).val() == m1){
+                        $(this).prop('checked', true);                            
+                    }
+                })		                	
+            })
         },
         _processResourceFilters: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
             var fjo = [];
@@ -1152,16 +1181,20 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                 return Object.keys(value).length !== 0;
             });
             var objectData = {resources: newArray};
-                    
-            hds.resourceLib._r2019renderResHtml(objectData, 0, tasset2);
-            if($('#searchTag .keyword').html() != '' || $('#filterTag .keyword-filter').html() != ''){
-                pstart = 0, pend = 2, fstart = 0, fend = 3;
-                hds.resourceLib._r2019renderPromoHtml(roPromoData, pstart, pend);
-                hds.resourceLib._r2019renderFeaturedHtml(roFeaturedData, fstart, fend)
-            }
             $(paginations).pagination('destroy');
             $('#loadResourceContent').empty();
-            hds.resourceLib._setPagination(objectData.resources.length, tasset2);
+            if($('#searchTag .keyword').html() != '' || $('#filterTag .keyword-filter').html() != ''){
+                pstart = 0, pend = 2, fstart = 0, fend = 3;
+                hds.resourceLib._r2019renderResHtml(objectData, 0, tasset2);                
+                hds.resourceLib._r2019renderPromoHtml(roPromoData, pstart, pend);
+                hds.resourceLib._r2019renderFeaturedHtml(roFeaturedData, fstart, fend);
+                hds.resourceLib._setPagination(objectData.resources.length, tasset2);
+            }else{
+                pStatus = false;
+                fStatus = false;
+                hds.resourceLib._r2019renderResHtml(roData, 0, tasset1);
+                hds.resourceLib._setPagination(objectData.resources.length, tasset1);
+            }
         },
         _r2019filtersButton: function(){
             console.log('In Filter');            
@@ -1215,7 +1248,7 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                 haveFilters = null;
             }
             $('.filters-section').hide();
-            $('.resource-filters.dtop > a').removeClass('active');
+            $('.resource-filters.dtop a').removeClass('active');
             $('#filterTag .keyword-filter').show();
 
             if(checkedSubVals == undefined){
@@ -1325,7 +1358,6 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                         $defaultURL = roDataSource,
                         $keyword = $.trim($("#resSearch").val()),            
                         queryURL = '';
-                        //queryURL = $defaultURL.replace(".html", "." + sortId + ".html");
                         $('#resLoading').css({'display':'block'});
                         $('.hv-resource-interaction.rlnew .resource-interaction-list').html('');
                         pStatus = false;
@@ -1336,10 +1368,10 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                         $(this).parent().addClass('selected');
                         $('.sort-by-button').find('.stitle').html(sortLabel);
                         if($keyword == ""){
-                            queryURL = $defaultURL + '?sort=' + sortId;
+                            queryURL = $defaultURL + "." + sortId;
                             hds.resourceLib._r2019loadResourceObject(queryURL);
                         }else{
-                            queryURL = $defaultURL + '?fulltext=' + encodeURIComponent($keyword) + '&sort=' + sortId;
+                            queryURL = $defaultURL + "." + sortId + '?fulltext=' + encodeURIComponent($keyword);
                             hds.resourceLib._r2019loadResourceObject(queryURL);
                         }
                 }
@@ -1450,9 +1482,8 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
             });
             
             $(document).on('click', '.searchResource', function(event) {
-                if ($(window).width() > 991) {
-                    $('#resLoading').css({'display':'block'});
-                    $('.hv-resource-interaction.rlnew .resource-interaction-list').html('');
+                hds.resourceLib._r2019checkSelectedFilter();
+                if ($(window).width() > 991) {                    
                     var txtVal = $.trim($('#resSearch').val()),
                         resStatus = localStorage.getItem('resStatus'),
                         paginations = '#loadResourceContent',
@@ -1482,7 +1513,8 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                             localStorage.setItem('resStatus', 'true');                        
                             searchVal = txtVal;
                             if(txtVal.length > 0){
-                                $('.slingcontent').css({'display': 'none'});
+                                $('#resLoading').css({'display':'block'});
+                                $('.hv-resource-interaction.rlnew .resource-interaction-list').html('');
                                 $('#searchTag .label').css({
                                     'display': 'inline'
                                 });
@@ -1553,6 +1585,7 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
             //open.click(function(e) {
             $(document).on('click', '.resource-filters.dtop .filterby', function(e) {
                 e.preventDefault();
+                hds.resourceLib._r2019checkSelectedFilter();
                 $(".sort-by-list").hide();
                 $('.sort-by-button').removeClass('border');
                 $("#recent-search").hide();
@@ -1624,6 +1657,7 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                     if($('#filterTag .keyword-filter').html() == ""){
                         $('#filterTag .label').css({'display': 'none'});
                     }
+                    hds.resourceLib._r2019checkSelectedFilter();
                     hds.resourceLib._r2019filtersButton();
                 }
                 var $checkStatus = hds.resourceLib._returnCheckStatus();
@@ -1631,6 +1665,7 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                     if($('#searchTag .keyword').html()==''){
                         pStatus = false;
                         fStatus = false;
+                        sStatus = false;
                         roTemp = [];                        
                         $('#loadResourceContent').empty();
                         $('.category-resources-listing').find('.no-matched-result').remove();
@@ -1651,12 +1686,14 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                     'display': 'none'
                 });
                 $('#searchTag .keyword').html('');
-                $('.clearSearchIcon').hide();                    
+                $('.clearSearchIcon').hide();
+                hds.resourceLib._r2019checkSelectedFilter();                    
                 if($('#resSearch').val() == ""){
                     var $checkStatus = hds.resourceLib._returnCheckStatus();
                     if($checkStatus == 0){
                         pStatus = false;
                         fStatus = false;
+                        sStatus = false;
                         roTemp = [];
                         $('.tagList .sfheight a.clear-results').css({'display':'none'});
                     }
@@ -1682,17 +1719,18 @@ var roDataSource = "/bin/services/resourcelibrarymaster";
                 $('#searchTag .label').css({'display': 'none'});
                 $('.clearSearchIcon').css({'display': 'none'});
                 hds.resourceLib._hideFilterProductLabel();
-                hds.resourceLib._sortByLabelText();
                 $('#cta-filters').css({'display':'none'});
                 $('.tagList .sfheight a.clear-results').css({'display':'none'});
                 mFilterCheck = false;
                 pStatus = false;
                 fStatus = false;
+                sStatus = false;
                 roTemp = [];
                 $("html, body").animate({
                     scrollTop: 0
                 }, "slow");
                 hds.resourceLib._r2019loadResourceObject(roDataSource);
+                hds.resourceLib._r2019checkSelectedFilter();
             });
 
             $(document).on('click', '#mobShowFilters', function() {

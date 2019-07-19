@@ -85,57 +85,62 @@ var pageSize = <%=properties.get("pagesize","10")%>;
             <div class="col-sm-8 resource-filters dtop hidden-xs hidden-sm">
                 <div class="rl-all-filters-label">${properties.filterbylabel}</div>
                 <div class="rl2019-filters-box">
-                    <a class="filterby" href="javascript:void(0);" data-refilter="FilteyContentType"> <span class="title">${properties.filterbycontentlabel}</span>
-                        <span class="caret-arrow"></span>
-                    </a>
-                    <c:if test="${properties.hidefilterbyproduct}">
-                        <a class="filterby" href="javascript:void(0);" data-refilter="FilteyProductType"> <span class="title">${properties.filterbyproductlabel}</span>
+                    <div class="fbox1" style="display:inline-block; float: left;">
+                        <a class="filterby" href="javascript:void(0);" data-refilter="FilteyContentType"> <span class="title">${properties.filterbycontentlabel}</span>
                             <span class="caret-arrow"></span>
                         </a>
-                    </c:if>
-                    <a class="filterby" href="javascript:void(0);" data-refilter="FilterByIndustry"> <span class="title">${properties.filterbyindustrylabel}</span>
-                        <span class="caret-arrow"></span>
-                    </a>
-                    <c:if test="${!properties.hidefilterbyevent}">
-                        <a class="filterby rl2019-pop-on" href="javascript:void(0);" data-refilter="FilteByEventType"> <span class="title">${properties.filterbyeventlabel}</span>
+                        <c:if test="${properties.hidefilterbyproduct}">
+                            <a class="filterby" href="javascript:void(0);" data-refilter="FilteyProductType"> <span class="title">${properties.filterbyproductlabel}</span>
+                                <span class="caret-arrow"></span>
+                            </a>
+                        </c:if>
+                        <a class="filterby" href="javascript:void(0);" data-refilter="FilterByIndustry"> <span class="title">${properties.filterbyindustrylabel}</span>
                             <span class="caret-arrow"></span>
                         </a>
-                    </c:if>
-                    <c:if test="${not empty properties.objectivesttitle}">
-                        <a class="filterby rl2019-pop-on" href="javascript:void(0);" data-refilter="FilteByObjectiveType">	<span class="title">${properties.objectivesttitle}</span>
-                            <span class="caret-arrow"></span>
-                        </a>
-                    </c:if>
-                    <c:if test="${not empty properties.topicstitle}">
-                        <a class="filterby rl2019-pop-on" href="javascript:void(0);" data-refilter="FilteByTopicType">	<span class="title">${properties.topicstitle}</span>
-                            <span class="caret-arrow"></span>
-                        </a>
-                    </c:if>
-                    <c:if test="${not empty properties.servicettitle}">
-                        <a class="filterby rl2019-pop-on" href="javascript:void(0);" data-refilter="FilteByServiceType">	<span class="title">${properties.servicettitle}</span>
-                            <span class="caret-arrow"></span>
-                        </a>
-                    </c:if> <a href="javascript:void(0);" class="rl2019-all-filters">All Filters</a>
-                    <c:if test="${empty properties.hidesortbyfunct}">
-                        <div class="sortResources rl2019-pop-off" id="sortResources">
-                            <div class="sort-by-button">
-                                <div class="slabel">${defaultitle}</div>
-                                <div class="stitle" data-dtitle="${defaulval}">${defaulval}</div>
-                                <div class="caret-arrow"></div>
+                        <c:if test="${!properties.hidefilterbyevent}">
+                            <a class="filterby rl2019-pop-on" href="javascript:void(0);" data-refilter="FilteByEventType"> <span class="title">${properties.filterbyeventlabel}</span>
+                                <span class="caret-arrow"></span>
+                            </a>
+                        </c:if>
+                        <c:if test="${not empty properties.objectivesttitle}">
+                            <a class="filterby rl2019-pop-on" href="javascript:void(0);" data-refilter="FilteByObjectiveType">	<span class="title">${properties.objectivesttitle}</span>
+                                <span class="caret-arrow"></span>
+                            </a>
+                        </c:if>
+                        <c:if test="${not empty properties.topicstitle}">
+                            <a class="filterby rl2019-pop-on" href="javascript:void(0);" data-refilter="FilteByTopicType">	<span class="title">${properties.topicstitle}</span>
+                                <span class="caret-arrow"></span>
+                            </a>
+                        </c:if>
+                        <c:if test="${not empty properties.servicettitle}">
+                            <a class="filterby rl2019-pop-on" href="javascript:void(0);" data-refilter="FilteByServiceType">	<span class="title">${properties.servicettitle}</span>
+                                <span class="caret-arrow"></span>
+                            </a>
+                        </c:if> 
+                    </div>
+                    <div class="fbox2" style="display:inline-block; float: right;">
+                        <a href="javascript:void(0);" class="rl2019-all-filters">All Filters <span class="glyphicon glyphicon-filter"></span></a>
+                        <c:if test="${empty properties.hidesortbyfunct}">
+                            <div class="sortResources rl2019-pop-off" id="sortResources">
+                                <div class="sort-by-button">
+                                    <div class="slabel">${defaultitle}</div>
+                                    <div class="stitle" data-dtitle="${defaulval}">${defaulval}</div>
+                                    <div class="caret-arrow"></div>
+                                </div>
+                                <div class="sort-by-list">
+                                    <ul>
+                                        <c:forEach items="${model.sortByType}" var="data" varStatus="status">
+                                            <c:set var="sortCriterialabel" value="${hdscorp:encodeForHTML(xssAPI, data['sortCriterialabel'])}" />
+                                            <c:set var="sortCriterialabel" value="${hdscorp:removeDoubleQuotes(sortCriterialabel)}" />
+                                            <c:set var="sortCriteriavalue" value="${hdscorp:filterHTML(xssAPI,data['sortCriteriavalue'])}" />
+                                            <li id="${fn:toLowerCase(sortCriteriavalue)}" value="${fn:replace(fn:replace(sortCriterialabel,'[', ''),']', '')}"><a href="javascript:void(0);">${sortCriterialabel}</a>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
                             </div>
-                            <div class="sort-by-list">
-                                <ul>
-                                    <c:forEach items="${model.sortByType}" var="data" varStatus="status">
-                                        <c:set var="sortCriterialabel" value="${hdscorp:encodeForHTML(xssAPI, data['sortCriterialabel'])}" />
-                                        <c:set var="sortCriterialabel" value="${hdscorp:removeDoubleQuotes(sortCriterialabel)}" />
-                                        <c:set var="sortCriteriavalue" value="${hdscorp:filterHTML(xssAPI,data['sortCriteriavalue'])}" />
-                                        <li id="${fn:toLowerCase(sortCriteriavalue)}" value="${fn:replace(fn:replace(sortCriterialabel,'[', ''),']', '')}"><a href="javascript:void(0);">${sortCriterialabel}</a>
-                                        </li>
-                                    </c:forEach>
-                                </ul>
-                            </div>
-                        </div>
-                    </c:if>
+                        </c:if>
+                    </div>
                 </div>
                 <div class="rl2019-filters-box-cta col-sm-4"> 
                     <a href="javascript:void(0);" class="rl2019-clear">Clear</a> | 
@@ -471,7 +476,6 @@ var pageSize = <%=properties.get("pagesize","10")%>;
     
     .hv-resource-interaction.rlnew .resource-tile.col-centered{
         margin-right:0;
-        height: ;
     }
     .hv-resource-interaction.rlnew .resource-tile.promo{
         text-align: center;
@@ -608,4 +612,69 @@ var pageSize = <%=properties.get("pagesize","10")%>;
     .resourcelibrarynew .res-filters-search .filters-section{
         z-index: 999;
     }
+    .resourcelibrarynew .sortResources .sort-by-list ul li{
+        text-align: left;
+    }
+	@media screen and (max-width: 1280px){
+	.hv-resource-interaction.rlnew .resource-tile .res-int-item a .pop{
+			height: auto;
+		}
+	}
+	@media screen and (max-width: 1200px){
+		.hv-resource-interaction .resource-tile .res-int-item .res-int-title h3{
+		    font-size: .9rem;
+		}
+		.hv-resource-interaction.rlnew .resource-tile.promo .res-int-item a{
+			font-size:.9rem;
+		}
+		.hv-resource-interaction.rlnew .resource-tile.promo .res-int-item a .res-int-title {
+			position: relative;
+			top: 35%;
+		}
+	}
+	@media screen and (max-width: 1070px){
+		.hv-resource-interaction.rlnew .resource-tile.promo .res-int-item a .res-int-title {
+			position: relative;
+			top: 28%;
+		}
+		.hv-resource-interaction .resource-tile.promo .res-int-item .res-int-title h3{
+			margin-bottom:0;
+		}
+	}
+	@media screen and (max-width: 991px){
+		.hv-resource-interaction.rlnew .resource-tile .res-int-item a .pop{
+		    display: block;
+			height: 148px
+		}
+		.hv-resource-interaction.rlnew .resource-tile .res-int-item.featured a .pop{
+		    height: 148px;
+		}
+		.hv-resource-interaction.rlnew .res-int-item .res-featured{
+		    top: -148px;
+		}
+		.hv-resource-interaction.rlnew .resource-tile,
+		.hv-resource-interaction.rlnew .resource-tile .res-int-item{
+			display:block;
+			width:100%;
+		}
+		.hv-resource-interaction.rlnew .resource-tile .res-int-item a{
+			height:auto !important;
+		}
+		.hv-resource-interaction.rlnew .resource-tile.promo .res-int-item{
+		    background-position: top center;
+		}
+		.hv-resource-interaction.rlnew .resource-tile.promo .res-int-item a .res-int-title{
+		    position: inherit;
+			top: 0;
+		}
+		.hv-resource-interaction.rlnew .resource-tile .res-int-item .res-int-title h3 {
+			font-size: 1.125rem;
+		}
+		.hv-resource-interaction.rlnew .resource-tile.promo .res-int-item a {
+			font-size: 1rem;
+		}
+		.hv-resource-interaction.rlnew .resource-tile.promo .res-int-item .res-int-title h3 {
+			margin-bottom: 11px;
+		}
+	}
 </style>

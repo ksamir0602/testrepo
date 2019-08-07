@@ -1,0 +1,127 @@
+/* Header/Footer Icons */
+.hv-promo-actions .hv-promos .hv-promo-actions-icon svg.icon-promo {
+  fill: #ffffff;
+  width: 67px;
+  height: 60px;
+}
+.hv-promo-actions .hv-footer-contact-action svg.icon-contact {
+  fill: #ffffff;
+  width: 23px;
+  height: 25px;
+}
+.footer .footer-gray .footer-container .social svg.icon-social {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+}
+
+.hds-global-header .hds-quick-navigation .icon.quick-svg{
+  top: 5px;
+  margin-right: 5px;
+  width: 23px;
+  height: 23px;
+  fill: #777777;
+}
+.hds-global-header .hds-quick-navigation .icon.nav-search svg{
+fill: #ffffff;
+stroke: #ffffff;
+stroke-width: 12px;
+size: 2em;
+top: 4px;
+margin-right: 0;
+left: 3px;
+width: 20px;
+height: 20px; 
+margin-top: 3px;
+margin-left: 5px; 
+}
+.contact-main-box .contact-icon {
+  display: table-cell;
+  vertical-align: middle;
+  padding-right: 7px;
+}
+.contact-main-box .contact-icon svg {
+  width: 30px;
+  height: 30px;
+  fill: #777777;
+}
+.contact-main-box .contact-text {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.hds-global-header .hds-quick-navigation > ul > li.search .nav-search {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.hds-global-header .hds-quick-navigation .nav-search {
+  background-color: #ce0000;
+  background-image: none;
+  width: 30px;
+  height: 26px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.icon-search-mobile{
+background-image: none;
+}
+.icon-search-mobile svg {
+width: 21px;
+height: 21px;
+fill: #999999;
+stroke: #999999;
+stroke-width: 14px;
+}
+.hds-global-header .hitachi-logo, .hds-global-header .hitachi-logo-mobile{
+height: 36px;
+width: 110px;
+}
+.hds-global-header .hitachi-logo, .hds-global-header .hitachi-logo-mobile {
+  margin: 4px 0 0px 15px;
+}
+#showGeo span.caret-arrow {
+  background: none !important;
+  width: 14px;
+  height: 9px;
+  display: inline-block;
+}
+#showGeo span.caret-arrow svg.icon-geo-overlay{
+  width: 17px;
+  height: 15px;
+  top: 3px;
+  fill: none;
+  stroke: #777777;
+  stroke-width: 55;
+  position: relative;
+}
+#showGeo.active span.caret-arrow svg.icon-geo-overlay .active {
+opacity: 1;
+}
+#showGeo span.caret-arrow svg.icon-geo-overlay .active, 
+#showGeo.active span.caret-arrow svg.icon-geo-overlay .default {
+opacity: 0;
+}
+.contact-main-box li a{
+padding: 5px 20px !important;
+}
+@media only screen and (max-width: 991px) {
+.hds-mobile-navigation ul .icon.quick-svg{
+  display: none;
+}
+.hds-global-header .hitachi-logo, .hds-global-header .hitachi-logo-mobile{
+  height: 34px;
+  margin-left: 15px;
+}
+.hds-global-header .hds-main-navigation-container{
+  top:43px;
+}
+.search-mobile.active:after{
+  bottom: 0;
+}
+}
+@media only screen and (min-width: 992px){
+.hds-global-header .hds-main-navigation-container {
+    top: 45px !important;
+}
+}
